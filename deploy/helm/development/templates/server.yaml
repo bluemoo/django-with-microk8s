@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: development-server
+  labels:
+    tier: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: server
+  template:
+    metadata:
+      labels:
+        tier: server
+    spec:
+      volumes:
+        - name: host-project
+          hostPath:
+            path: {{ .Values.projectDir }}
+      containers:
+        - name: server
+          image: {{ .Values.imageTag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          workingDir: /opt/server
+          command: ["python"]
+          args: ["manage.py", "runserver_plus", "0.0.0.0:8000"]
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          volumeMounts:
+            - name: host-project
+              mountPath: /opt/server/
