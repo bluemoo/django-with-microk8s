@@ -1,8 +1,7 @@
-== Prerequsites ==
-Docker >= v20.10.0
-Microk8s >= v1.19
+## Prerequisites
+- Docker >= v20.10.0
+- Microk8s >= v1.19
 
-
-== Installation Notes ==
+## Installation Notes
 If you want to run docker as non-root user then you need to add it to the docker group.
 https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue
