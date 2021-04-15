@@ -1,6 +1,8 @@
 ## Prerequisites
 - Docker >= v20.10.0
-- Microk8s >= v1.19
+- Microk8s >= v1.21
+
+Turn on helm3
 
 ## Operation
 1. Pull the repository locally, and run: `./syscontrol.sh start` 
