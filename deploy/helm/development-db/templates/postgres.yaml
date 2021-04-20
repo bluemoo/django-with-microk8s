@@ -1,33 +1,3 @@
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: postgres-pv
-  labels:
-    app: postgres
-    type: local
-spec:
-  storageClassName: microk8s-hostpath
-  capacity:
-    storage: 300Mi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: "/tmp/postgresdata"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: postgres-pv-claim
-  labels:
-    app: postgres
-spec:
-  storageClassName: microk8s-hostpath
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 300Mi
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -67,9 +37,10 @@ spec:
         - containerPort: 5432
           name: postgresdb
         volumeMounts:
-        - name: pv-data
+        - name: postgres-data
           mountPath: /var/lib/postgresql/data
       volumes:
-      - name: pv-data
-        persistentVolumeClaim:
-          claimName: postgres-pv-claim
+      - name: postgres-data
+        hostPath:
+          path: /tmp/postgresdata
+          type: DirectoryOrCreate
