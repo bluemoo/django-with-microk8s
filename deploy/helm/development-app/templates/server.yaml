@@ -18,6 +18,12 @@ spec:
         - name: host-project
           hostPath:
             path: {{ .Values.projectDir }}
+        - name: database-secrets
+          secret:
+            secretName: database-credentials
+        - name: app-secrets
+          secret:
+            secretName: app-secrets
       containers:
         - name: server
           image: {{ .Values.imageTag }}
@@ -40,3 +46,9 @@ spec:
           volumeMounts:
             - name: host-project
               mountPath: /opt/server/
+            - name: database-secrets
+              mountPath: "/etc/secrets/database-secrets"
+              readOnly: true
+            - name: app-secrets
+              mountPath: "/etc/secrets/app-secrets"
+              readOnly: true

@@ -1,0 +1,2 @@
+This chart is a source of secrets for the development environment, but in a real production environment it should be
+replaced with an actual secret management system / approach.

@@ -4,5 +4,5 @@ metadata:
   name: nginx-ingress-tcp-microk8s-conf
   namespace: ingress
 data:
-  8000: "development/server-service:8000"
+  8000: "development-app/server-service:8000"
 

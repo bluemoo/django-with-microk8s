@@ -1,15 +1,3 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-config
-  labels:
-    app: postgres
-data:
-  POSTGRES_DB: postgresdb
-  POSTGRES_USER: postgresadmin
-  POSTGRES_PASSWORD: postgrespwd
-  PGDATA: /var/lib/postgresql/data/pgdata
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -30,9 +18,21 @@ spec:
       containers:
       - name: postgres
         image: postgres:13.2
-        envFrom:
-        - configMapRef:
-            name: postgres-config
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-credentials
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-credentials
+              key: password
+        - name: POSTGRES_DB
+          value: appdb
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
         ports:
         - containerPort: 5432
           name: postgresdb

@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import secrets
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h!vp_(%0@63%o&q04(^127a$i)$a%v1x6&(x8lb0f+r9!#qdj*'
+SECRET_KEY = secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,13 +63,12 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgresdb',
-        'USER': 'postgresadmin',
-        'PASSWORD': 'postgrespwd',
+        'NAME': 'appdb',
+        'USER': secrets.DATABASE_USERNAME,
+        'PASSWORD': secrets.DATABASE_PASSWORD,
         # These come from the naming in kubernetes service description
         'HOST': os.getenv('POSTGRES_SERVICE_HOST'),
         'PORT': os.getenv('POSTGRES_SERVICE_PORT'),
