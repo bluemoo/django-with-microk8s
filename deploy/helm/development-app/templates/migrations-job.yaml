@@ -38,12 +38,15 @@ spec:
           workingDir: /opt/server
           command: ["python"]
           args: ["manage.py", "migrate", "--noinput"]
+          env:
+            - name: SECRETS_ROOTPATH
+              value: "{{ .Values.secrets.rootPath }}"
           volumeMounts:
             - name: host-project
               mountPath: /opt/server/
             - name: database-secrets
-              mountPath: "/etc/secrets/database-secrets"
+              mountPath: "{{ .Values.secrets.rootPath }}/database-secrets"
               readOnly: true
             - name: app-secrets
-              mountPath: "/etc/secrets/app-secrets"
+              mountPath: "{{ .Values.secrets.rootPath }}/app-secrets"
               readOnly: true

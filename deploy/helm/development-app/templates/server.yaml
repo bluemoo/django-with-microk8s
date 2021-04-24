@@ -31,6 +31,9 @@ spec:
           workingDir: /opt/server
           command: ["python"]
           args: ["manage.py", "runserver_plus", "0.0.0.0:8000"]
+          env:
+            - name: SECRETS_ROOTPATH
+              value: "{{ .Values.secrets.rootPath }}"
           ports:
             - name: http
               containerPort: 8000
@@ -47,8 +50,8 @@ spec:
             - name: host-project
               mountPath: /opt/server/
             - name: database-secrets
-              mountPath: "/etc/secrets/database-secrets"
+              mountPath: "{{ .Values.secrets.rootPath }}/database-secrets"
               readOnly: true
             - name: app-secrets
-              mountPath: "/etc/secrets/app-secrets"
+              mountPath: "{{ .Values.secrets.rootPath }}/app-secrets"
               readOnly: true
