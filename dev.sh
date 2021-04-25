@@ -68,7 +68,7 @@ start() {
 }
 
 stop() {
-  microk8s.helm3 -n development uninstall development-app development-db development-secrets
+  microk8s.helm3 -n development uninstall development-secrets development-db development-app
 }
 
 status() {
