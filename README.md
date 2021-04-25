@@ -9,8 +9,8 @@ microk8s enable helm3 dns storage registry host-access ingress
 ```
 
 ## Operation
-1. Pull the repository locally, and run: `./syscontrol.sh start` 
-1. Check for successful startup with: `./syscontrol.sh status`
+1. Pull the repository locally, and run: `./dev.sh start` 
+1. Check for successful startup with: `./dev.sh status`
 1. Navigate to http://localhost:8000/admin and you should see the django admin form.
 1. Try to log in with any username + password, and you'll be rejected without other error if the server is properly talking to the server.
 
