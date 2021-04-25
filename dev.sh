@@ -28,6 +28,15 @@ main() {
     startup-logs)
       startup_logs
       ;;
+    test)
+      run_tests
+      ;;
+    manage)
+      run_manage "$@"
+      ;;
+    server-shell)
+      server_shell
+      ;;
     *)
       echo "Unknown command"
       exit 1
@@ -87,8 +96,22 @@ startup_logs() {
   microk8s.kubectl -n development logs -l tier=startup -f --tail 100
 }
 
+server_pod() {
+  local name=$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")
+  echo "$name"
+}
+
 server_shell() {
-  microk8s.kubectl -n development exec -it  -- /bin/sh
+  microk8s.kubectl -n development exec -it $(server_pod) -- /bin/sh
+}
+
+run_tests() {
+  microk8s.kubectl -n development exec $(server_pod) -- python manage.py test
+}
+
+run_manage() {
+  shift
+  microk8s.kubectl -n development exec $(server_pod) -- python manage.py "$@"
 }
 
 main "$@"
