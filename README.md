@@ -1,8 +1,13 @@
 ## Prerequisites
+Including minimum tested versions:
 - Docker >= v20.10.0
 - Microk8s >= v1.21
+- [Pre-commit](https://pre-commit.com/) >= 2.12.1
 
 ## Installation
+```
+pre-commit install
+```
 ```
 microk8s.start
 microk8s enable helm3 dns storage registry host-access ingress

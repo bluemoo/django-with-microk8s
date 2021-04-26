@@ -1,0 +1,2 @@
+[tool.black]
+line-length = 119 # This matches the default line length in pycharm

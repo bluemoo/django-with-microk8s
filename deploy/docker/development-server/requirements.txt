@@ -4,3 +4,4 @@ Werkzeug==1.0.1
 django-extensions==3.1.2
 psycopg2-binary==2.8.6
 django-redis==4.12.1
+black==20.8b1

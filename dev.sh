@@ -101,22 +101,27 @@ startup_logs() {
 }
 
 server_exec() {
-  echo "$@"
+  # This is here primarily to be used by the git pre-commit hooks. It does not pass the -it flag to kubectl exec, which
+  # would result in an error, because pre-commit hooks cannot be interactive.
   local name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
-  microk8s.kubectl -n development exec -it $name -- "$@"
+  microk8s.kubectl -n development exec "${name}" -- "$@"
+}
+
+interactive_exec() {
+  local name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
+  microk8s.kubectl -n development exec -it "${name}" -- "$@"
 }
 
 server_shell() {
-  server_exec /bin/sh
+  interactive_exec /bin/sh
 }
 
 run_tests() {
-  server_exec python manage.py test
+  run_manage test
 }
 
 run_manage() {
-  shift
-  server_exec python manage.py "$@"
+  interactive_exec python manage.py "$@"
 }
 
 main "$@"

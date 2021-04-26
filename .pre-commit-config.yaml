@@ -1,0 +1,10 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: local
+    hooks:
+    - id: black
+      name: Python Formatting
+      language: system
+      files: '[.]py$'
+      entry: ./dev.sh server-exec /bin/sh -c 'cd .. && black "$@"' --
