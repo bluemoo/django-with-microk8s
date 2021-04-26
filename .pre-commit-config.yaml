@@ -6,5 +6,5 @@ repos:
     - id: black
       name: Python Formatting
       language: system
-      files: '[.]py$'
+      types: [python]
       entry: ./dev.sh server-exec /bin/sh -c 'cd .. && black "$@"' --
