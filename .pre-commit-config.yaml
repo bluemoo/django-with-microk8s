@@ -8,3 +8,8 @@ repos:
       language: system
       types: [python]
       entry: ./dev.sh server-exec /bin/sh -c 'cd .. && black "$@"' --
+    - id: flake8
+      name: Style Guide Checking
+      language: system
+      types: [python]
+      entry: ./dev.sh server-exec /bin/sh -c 'cd .. && flake8 --config setup.cfg "$@"' --
