@@ -39,7 +39,7 @@ spec:
         - name: migration-job
           image: {{ .Values.imageTag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          workingDir: /opt/server
+          workingDir: /opt/project/server
           command: ["python"]
           args: ["manage.py", "migrate", "--noinput"]
           env:
@@ -47,7 +47,7 @@ spec:
               value: "{{ .Values.secrets.rootPath }}"
           volumeMounts:
             - name: host-project
-              mountPath: /opt/server/
+              mountPath: /opt/project/
             - name: database-secrets
               mountPath: "{{ .Values.secrets.rootPath }}/database-secrets"
               readOnly: true

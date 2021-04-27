@@ -72,7 +72,7 @@ start() {
   echo "Installing server"
   microk8s.helm3 install development-app deploy/helm/development-app/ \
                -n development --create-namespace \
-               --set projectDir="${PROJECT_ROOT}/server" \
+               --set projectDir="${PROJECT_ROOT}" \
                --set imagePullPolicy=Always \
                --set imageTag="localhost:32000/server:development-server" \
 

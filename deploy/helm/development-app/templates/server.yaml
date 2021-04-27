@@ -28,7 +28,7 @@ spec:
         - name: server
           image: {{ .Values.imageTag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          workingDir: /opt/server
+          workingDir: /opt/project/server
           command: ["python"]
           args: ["manage.py", "runserver_plus", "0.0.0.0:8000"]
           env:
@@ -48,7 +48,7 @@ spec:
               port: http
           volumeMounts:
             - name: host-project
-              mountPath: /opt/server/
+              mountPath: /opt/project/
             - name: database-secrets
               mountPath: "{{ .Values.secrets.rootPath }}/database-secrets"
               readOnly: true
