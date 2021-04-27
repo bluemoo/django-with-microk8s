@@ -1,10 +1,13 @@
-# Required for runserver_plus
-Werkzeug==1.0.1
-django-extensions==3.1.2
 
 # Required for the pre-commit hooks
 black==20.8b1
 flake8==3.9.1
+mypy==0.812
+
+# Required for runserver_plus
+Werkzeug==1.0.1
+django-extensions==3.1.2
+
 
 # App requirements
 psycopg2-binary==2.8.6

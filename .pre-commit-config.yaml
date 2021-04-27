@@ -20,7 +20,14 @@ repos:
       types: [python]
       entry: ./dev.sh server-exec /bin/sh -c 'cd .. && black "$@"' --
     - id: flake8
-      name: Style Guide Checking
+      name: Style Guide Check
       language: system
       types: [python]
       entry: ./dev.sh server-exec /bin/sh -c 'cd .. && flake8 --config setup.cfg "$@"' --
+
+    # As your codebase grows, mypy may eventually get too slow to run with every commit.
+    - id: mypy
+      name: Type Check
+      language: system
+      types: [python]
+      entry: ./dev.sh server-exec /bin/sh -c 'cd .. && mypy "$@"' --

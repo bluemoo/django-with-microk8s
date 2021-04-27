@@ -36,6 +36,7 @@ main() {
       run_tests
       ;;
     manage)
+      shift
       run_manage "$@"
       ;;
     server-shell)
