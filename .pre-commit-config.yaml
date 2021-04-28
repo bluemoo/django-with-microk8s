@@ -14,11 +14,24 @@
 repos:
 -   repo: local
     hooks:
+    - id: autoflake
+      name: Remove Unused
+      language: system
+      types: [python]
+      entry: ./dev.sh server-exec /bin/sh -c 'cd .. && autoflake --in-place "$@"' --
+
+    - id: isort
+      name: Sort Imports
+      language: system
+      types: [python]
+      entry: ./dev.sh server-exec /bin/sh -c 'cd .. && isort "$@"' --
+
     - id: black
       name: Python Formatting
       language: system
       types: [python]
       entry: ./dev.sh server-exec /bin/sh -c 'cd .. && black "$@"' --
+
     - id: flake8
       name: Style Guide Check
       language: system
@@ -31,3 +44,9 @@ repos:
       language: system
       types: [python]
       entry: ./dev.sh server-exec /bin/sh -c 'cd .. && mypy "$@"' --
+
+    - id: shellcheck
+      name: Shell Formatting
+      language: system
+      types: [shell]
+      entry: ./dev.sh server-exec /bin/sh -c 'cd .. && shellcheck "$@"' --
