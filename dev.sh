@@ -62,6 +62,8 @@ start() {
                -n development --create-namespace
 
   echo "Installing database"
+
+
   microk8s.helm3 install development-db deploy/helm/development-db/ \
                -n development --create-namespace
 
@@ -104,12 +106,14 @@ startup_logs() {
 server_exec() {
   # This is here primarily to be used by the git pre-commit hooks. It does not pass the -it flag to kubectl exec, which
   # would result in an error, because pre-commit hooks cannot be interactive.
-  local name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
+  local name
+  name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
   microk8s.kubectl -n development exec "${name}" -- "$@"
 }
 
 interactive_exec() {
-  local name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
+  local name
+  name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
   microk8s.kubectl -n development exec -it "${name}" -- "$@"
 }
 
