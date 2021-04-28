@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: host-project
           hostPath:
-            path: {{ .Values.projectDir }}
+            path: "{{ .Values.projectDir }}"
         - name: database-secrets
           secret:
             secretName: database-credentials
@@ -37,8 +37,8 @@ spec:
             secretName: app-secrets
       containers:
         - name: migration-job
-          image: {{ .Values.imageTag }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          image: "{{ .Values.imageTag }}"
+          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
           workingDir: /opt/project/server
           command: ["python"]
           args: ["manage.py", "migrate", "--noinput"]
