@@ -33,7 +33,7 @@ main() {
       server_exec "$@"
       ;;
     test)
-      run_tests
+      run_tests "$@"
       ;;
     manage)
       shift
@@ -122,7 +122,8 @@ server_shell() {
 }
 
 run_tests() {
-  run_manage test
+  shift
+  run_manage test "$@"
 }
 
 run_manage() {
