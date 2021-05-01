@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: pip install -r deploy/docker/development-server/hook-requirements.txt
       - run: isort --check-only .
-      - run: black .
+      - run: black --check --diff .
       - run: flake8 --config setup.cfg .
       - run: mypy .
       - run: find . -type f -name *.sh | xargs shellcheck
