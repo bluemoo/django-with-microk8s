@@ -11,11 +11,6 @@ class SecretLoader:
             return f.read()
 
 
-
-
-
-
-        
 env_rootpath: Optional[str] = os.getenv("SECRETS_ROOTPATH")
 assert env_rootpath
 loader = SecretLoader(rootpath=env_rootpath)
