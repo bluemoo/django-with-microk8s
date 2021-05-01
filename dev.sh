@@ -108,7 +108,7 @@ server_exec() {
   # would result in an error, because pre-commit hooks cannot be interactive.
   local name
   name="$(kubectl -n development get pods --selector=tier=server  --no-headers -o custom-columns=":metadata.name")"
-  microk8s.kubectl -n development exec ${name} -- "$@"
+  microk8s.kubectl -n development exec "${name}" -- "$@"
 }
 
 interactive_exec() {
