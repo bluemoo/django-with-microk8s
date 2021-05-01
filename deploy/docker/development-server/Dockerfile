@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED 1
 # inside the container. However, in a production version of the system, it is more likely that you'll just want the
 # webserver files mapped to /opt/project/server, and that /opt/project would only contain the server/ directory.
 RUN mkdir /opt/project
+COPY deploy/docker/development-server/hook-requirements.txt /opt/project
 COPY deploy/docker/development-server/requirements.txt /opt/project
 
-RUN pip install -r /opt/project/requirements.txt
+RUN pip install -r /opt/project/hook-requirements.txt -r /opt/project/requirements.txt

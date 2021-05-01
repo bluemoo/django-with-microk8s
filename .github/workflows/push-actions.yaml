@@ -2,8 +2,13 @@ name: push-actions
 on: [push]
 jobs:
   check-files:
+    name: "Check Files"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: ls
-      - run: pip install mypy==0.812
+      - run: pip install -r deploy/docker/development-server/hook-requirements.txt
+      - run: isort .
+      - run: black .
+      - run: flake8 --config setup.cfg .
+      - run: mypy .
+      - run: find . -type f -name *.sh | xargs shellcheck
