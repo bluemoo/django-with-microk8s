@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: pip install -r deploy/docker/development-server/hook-requirements.txt
-      - run: isort .
+      - run: isort --check-only .
       - run: black .
       - run: flake8 --config setup.cfg .
       - run: mypy .
