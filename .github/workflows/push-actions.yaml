@@ -19,7 +19,7 @@ jobs:
       - uses: balchua/microk8s-actions@v0.2.2
         with:
           channel: 'latest/stable'
-          addons: "['helm3', 'dns', 'storage', 'registry', 'host-access', 'ingress']"
+          addons: '["helm3", "dns", "storage", "registry", "host-access", "ingress"]'
       - name: Test MicroK8s
         id: myactions
         run: |
