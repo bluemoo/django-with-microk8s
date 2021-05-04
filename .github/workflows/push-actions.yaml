@@ -23,16 +23,12 @@ jobs:
       - name: Test MicroK8s
         id: myactions
         run: |
-          sudo usermod -a -G microk8s $USER
-          sudo chown -f -R $USER ~/.kube
-          su - $USER
-
-          microk8s.kubectl get no
-          microk8s.kubectl get pods -A -o wide
+          sg microk8s -c 'microk8s.kubectl get no'
+          sg microk8s -c 'microk8s.kubectl get pods -A -o wide'
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install charts
-        run: ./dev.sh start
+        run: sg microk8s -c './dev.sh start'
   run-django-tests:
     name: "Django tests"
     runs-on: ubuntu-latest
