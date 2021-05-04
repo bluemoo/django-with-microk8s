@@ -27,14 +27,14 @@ jobs:
       options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-    - uses: actions/setup-python@v2
-      with:
-       python-version: 3.9
-    - name: Install dependencies
-    - run: pip install -r deploy/docker/development-server/requirements.txt
-    - name: Run tests
-      run: python manage.py test
+      - uses: actions/checkout@v2
+      - name: Set up Python
+      - uses: actions/setup-python@v2
+        with:
+         python-version: 3.9
+      - name: Install dependencies
+      - run: pip install -r deploy/docker/development-server/requirements.txt
+      - name: Run tests
+        run: python manage.py test
 
 
