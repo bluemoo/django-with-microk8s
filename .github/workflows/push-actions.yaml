@@ -36,6 +36,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r deploy/docker/development-server/requirements.txt
       - name: Run tests
+        working-directory: ./server
         run: python manage.py test
 
 
