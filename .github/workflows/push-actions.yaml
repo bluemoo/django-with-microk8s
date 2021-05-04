@@ -16,7 +16,7 @@ jobs:
     name: "Tests in K8s"
     runs-on: ubuntu-latest
     steps:
-      - uses: balchua/microk8s-actions@v0.1.3
+      - uses: balchua/microk8s-actions@v0.2.2
         with:
           channel: 'latest/stable'
           addons: "['helm3', 'dns', 'storage', 'registry', 'host-access', 'ingress']"
