@@ -12,3 +12,29 @@ jobs:
       - run: flake8 --config setup.cfg .
       - run: mypy .
       - run: find . -type f -name *.sh | xargs shellcheck
+  run-django-tests:
+    name: "Django tests"
+    runs-on: ubuntu-latest
+
+    services:
+      image: postgres:13.2
+      env:
+        - POSTGRES_USER: postgresadmin
+        - POSTGRES_PASSWORD: postgrespwd
+        - POSTGRES_DB: appdb
+      ports:
+        - 5432:5432
+      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+    - uses: actions/setup-python@v2
+      with:
+       python-version: 3.9
+    - name: Install dependencies
+    - run: pip install -r deploy/docker/development-server/requirements.txt
+    - name: Run tests
+      run: python manage.py test
+
+
