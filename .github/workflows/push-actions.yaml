@@ -12,3 +12,20 @@ jobs:
       - run: flake8 --config setup.cfg .
       - run: mypy .
       - run: find . -type f -name *.sh | xargs shellcheck
+  run-django-tests:
+    name: "Tests in K8s"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Microk8s
+        uses: balchua/microk8s-actions@v0.2.2
+        with:
+          channel: 'latest/stable'
+          addons: '["helm3", "dns", "storage", "registry", "host-access", "ingress"]'
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install charts
+        run: sg microk8s -c './dev.sh start'
+      - name: Wait for full startup
+        run: kubectl -n development wait --for=condition=ready pod -l tier=server
+      - name: Run tests
+        run: sg microk8s -c './dev.sh test'
