@@ -123,7 +123,7 @@ server_shell() {
 
 run_tests() {
   shift
-  run_manage test "$@"
+  server_exec python manage.py test "$@"
 }
 
 run_manage() {
