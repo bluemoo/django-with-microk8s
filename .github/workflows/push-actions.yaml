@@ -19,6 +19,12 @@ jobs:
       - uses: balchua/microk8s-actions@v0.1.3
         with:
           channel: 'latest/stable'
+          addons: "['helm3', 'dns', 'storage', 'registry', 'host-access', 'ingress']"
+      - name: Test MicroK8s
+        id: myactions
+        run: |
+          microk8s.kubectl get no
+          microk8s.kubectl get pods -A -o wide
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install charts
