@@ -23,6 +23,10 @@ jobs:
       - name: Test MicroK8s
         id: myactions
         run: |
+          sudo usermod -a -G microk8s $USER
+          sudo chown -f -R $USER ~/.kube
+          su - $USER
+
           microk8s.kubectl get no
           microk8s.kubectl get pods -A -o wide
       - name: Checkout code
