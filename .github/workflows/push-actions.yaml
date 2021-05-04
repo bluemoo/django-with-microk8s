@@ -12,48 +12,22 @@ jobs:
       - run: flake8 --config setup.cfg .
       - run: mypy .
       - run: find . -type f -name *.sh | xargs shellcheck
-  run-djang-tests-in-k8s:
+  run-django-tests:
     name: "Tests in K8s"
     runs-on: ubuntu-latest
     steps:
-      - uses: balchua/microk8s-actions@v0.2.2
+      - name: Install Microk8s
+        uses: balchua/microk8s-actions@v0.2.2
         with:
           channel: 'latest/stable'
           addons: '["helm3", "dns", "storage", "registry", "host-access", "ingress"]'
-      - name: Test MicroK8s
-        id: myactions
-        run: |
-          sg microk8s -c 'microk8s.kubectl get no'
-          sg microk8s -c 'microk8s.kubectl get pods -A -o wide'
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install charts
         run: sg microk8s -c './dev.sh start'
-  run-django-tests:
-    name: "Django tests"
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:13.2
-        env:
-          POSTGRES_USER: postgresadmin
-          POSTGRES_PASSWORD: postgrespwd
-          POSTGRES_DB: appdb
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-         python-version: 3.9
-      - name: Install dependencies
-        run: pip install -r deploy/docker/development-server/requirements.txt
+      - name: Wait for full startup
+        run: kubectl -n development wait --for=condition=ready pod -l tier=server
       - name: Run tests
-        working-directory: ./server
-        run: python manage.py test
+        run: sg microk8s -c './dev.sh test'
 
 
