@@ -14,6 +14,14 @@ spec:
       labels:
         tier: server
     spec:
+      securityContext:
+        # The default behavior of your node is to run as root, but that is undesirable, even in a dev environment,
+        # because root in the container is root on the node (your machine). In dev we still need the pod user to
+        # have some permissions, most notably the ability to write to the file system, because we're actually
+        # running our pre-commit hooks *inside* the pod. Therefore, we're going to run the server pod, and your code
+        # as the user that runs helm3. In a production version of this template, you'd probably want to run as
+        # something more secure.
+        runAsUser: {{ .Values.uid }}
       volumes:
         - name: host-project
           hostPath:

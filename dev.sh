@@ -78,6 +78,7 @@ start() {
                --set projectDir="${PROJECT_ROOT}" \
                --set imagePullPolicy=Always \
                --set imageTag="localhost:32000/server:development-server" \
+               --set uid=${UID}
 
   echo "Configuring Ingress"
   microk8s.kubectl apply -f deploy/helm/development-app/microk8s-ingress.yaml
