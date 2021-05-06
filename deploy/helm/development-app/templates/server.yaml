@@ -22,6 +22,7 @@ spec:
         # as the user that runs helm3. In a production version of this template, you'd probably want to run as
         # something more secure.
         runAsUser: {{ .Values.uid }}
+        runAsGroup: {{ .Values.gid }}
         runAsNonRoot: true
       volumes:
         - name: host-project
