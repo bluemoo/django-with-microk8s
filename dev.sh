@@ -4,6 +4,12 @@ set -euo pipefail
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 main() {
+  if [ $# -eq 0 ]; then
+    show_help
+    exit 1
+  fi
+
+
   case $1 in
     start)
       start
@@ -43,7 +49,7 @@ main() {
       server_shell
       ;;
     *)
-      echo "Unknown command"
+      show_help
       exit 1
       ;;
   esac
@@ -130,6 +136,29 @@ run_tests() {
 
 run_manage() {
   interactive_exec python manage.py "$@"
+}
+
+show_help() {
+  echo "Operate the project development environment."
+  echo
+  echo "Usage: dev.sh COMMAND"
+  echo
+  echo "System control commands:"
+  echo "  start                        - Start the whole system in a running microk8s"
+  echo "  stop                         - Uninstall all helm charts"
+  echo "  restart                      - Stop, then start, the system"
+  echo "  status                       - Shortcut to see the status of all pods in the system"
+  echo
+  echo "Component log commands:"
+  echo "  postgres-logs                - View logs from postgres"
+  echo "  startup-logs                 - View logs from the database migration job"
+  echo "  server-logs                  - View logs from the webserver"
+  echo
+  echo "Application control commands:"
+  echo "  test [test_label ...]        - Run django tests"
+  echo "  manage [subcommand]          - Run django manage.py file in the server container"
+  echo "  server-exec [command_string] - Run the command string in the server container"
+  echo "  server-shell                 - Open an interactive shell in the server container"
 }
 
 main "$@"
