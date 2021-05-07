@@ -3,6 +3,16 @@ set -euo pipefail
 
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+REQUIRED_ADDONS=(
+  'dns'
+  'helm3'
+  'host-access'
+  'ingress'
+  'registry'
+  'storage'
+)
+
+
 main() {
   if [ $# -eq 0 ]; then
     show_help
@@ -56,6 +66,20 @@ main() {
 }
 
 start() {
+  echo "Checking microk8s configuration"
+  STATUS=$(microk8s.status)
+  if [[ ! ($STATUS =~ "microk8s is running") ]]; then
+    echo "Microk8s is not running. Try: microk8s.start"
+    exit 1
+  fi
+  ENABLED=$(echo "${STATUS}" | sed -n '/enabled:/,$p' | sed -n '/disabled:/q;p')
+  for addon in "${REQUIRED_ADDONS[@]}"; do
+    if [[ ! ($ENABLED =~ $addon) ]]; then
+      echo "The Microk8s addon ${addon} is not enabled. Try running: microk8s.enable ${addon}"
+      exit 1
+    fi
+  done
+
   echo "Build image"
   docker build -t server:development-server -f deploy/docker/development-server/Dockerfile .
 
