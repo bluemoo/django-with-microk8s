@@ -1,5 +1,29 @@
+# Django with MicroK8s
+## Start Building Your Project
+This project is meant to be both a reference and an actual github template that
+can be used to quickly start development on a Django-based web app. After
+installing prerequisites and downloading this repository, only one command is
+needed to have a working, browsable application.
+
+The web app runs in a Kubernetes cluster run by microk8s, which allows us to
+ignore a lot of complexity normally involved with installing software for local
+development.
+
+## Provided Tools
+  - A running Django server 
+  - PostgreSQL database
+  - Redis Cache
+  - Ingress configuration to access the web server from your local machine
+  - Automatic database migration on start
+  - Automatic web-server reloading on code changes
+  - Demonstration of Kubernetes Secrets integration
+  - Pre-commit hooks with style checking and linting
+  - Continuous Integration via Github Actions
+  - A shell script with useful commands to interact with the system
+
+
 ## Prerequisites
-Including minimum tested versions:
+You'll need to install the following software:
 - Docker >= v20.10.0
 - Microk8s >= v1.21
 - [Pre-commit](https://pre-commit.com/) >= 2.12.1
