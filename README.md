@@ -11,7 +11,7 @@ needed to have a working, browsable application.
 
 ## Provided Tools
   - [A running Django server](deploy/helm/development-app/templates/server.yaml) 
-  - [PostgreSQL database](deploy/helm/development-db/postgres.yaml)
+  - [PostgreSQL database](deploy/helm/development-db/templates/postgres.yaml)
   - [Redis Cache](deploy/helm/development-app/templates/redis.yaml)
   - [Ingress configuration](deploy/helm/development-app/microk8s-ingress.yaml) to access the web server from your local machine
   - Automatic [database migration](deploy/helm/development-app/templates/migrations-job.yaml) on start
@@ -23,8 +23,8 @@ needed to have a working, browsable application.
 
 ## Prerequisites
 You'll need to install the following software:
-- Docker >= v20.10.0
-- Microk8s >= v1.21
+- [Docker](https://docs.docker.com/get-docker/) >= v20.10.0
+- [Microk8s](https://microk8s.io/docs) >= v1.21
 - [Pre-commit](https://pre-commit.com/) >= 2.12.1
 
 Note that the system has only been tested on Ubuntu 18+, but should
