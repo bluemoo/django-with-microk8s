@@ -87,13 +87,18 @@ start() {
   docker tag server:development-server localhost:32000/server:development-server
   docker push localhost:32000/server:development-server
 
+
+  # Behind the scenes, this script uses helm3 to install all 3 of the needed helm charts. Each chart is required for
+  # the subsequent one. First secrets are configured, then the database is set up, with the username and password
+  # provided by the secrets. Once the database comes up fully, the server is started. The server helm chart has a
+  # pre-install hook that runs ./dev manage migrate, to make sure that the database has been fully set up before
+  # running the server.
+
   echo "Setting up Secrets"
   microk8s.helm3 install development-secrets deploy/helm/development-secrets/ \
                -n development --create-namespace
 
   echo "Installing database"
-
-
   microk8s.helm3 install development-db deploy/helm/development-db/ \
                -n development --create-namespace
 

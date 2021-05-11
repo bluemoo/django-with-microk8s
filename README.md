@@ -10,16 +10,16 @@ installing prerequisites and downloading this repository, only one command is
 needed to have a working, browsable application.
 
 ## Provided Tools
-  - A running Django server 
-  - PostgreSQL database
-  - Redis Cache
-  - Ingress configuration to access the web server from your local machine
-  - Automatic database migration on start
+  - [A running Django server](deploy/helm/development-app/templates/server.yaml) 
+  - [PostgreSQL database](deploy/helm/development-db/postgres.yaml)
+  - [Redis Cache](deploy/helm/development-app/templates/redis.yaml)
+  - [Ingress configuration](deploy/helm/development-app/microk8s-ingress.yaml) to access the web server from your local machine
+  - Automatic [database migration](deploy/helm/development-app/templates/migrations-job.yaml) on start
   - Automatic web-server reloading on code changes
-  - Demonstration of Kubernetes Secrets integration
-  - Pre-commit hooks with style checking and linting
-  - Continuous Integration via Github Actions
-  - A shell script with useful commands to interact with the system
+  - [Demonstration of Kubernetes Secrets](deploy/helm/development-secrets/templates/secrets.yaml) integration
+  - [Pre-commit hooks](.pre-commit-config.yaml) with style checking and linting
+  - Continuous Integration via [Github Actions](.github/workflows/push-actions.yaml)
+  - A [shell script](dev.sh) with useful commands to interact with the system
 
 ## Prerequisites
 You'll need to install the following software:
