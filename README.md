@@ -1,13 +1,13 @@
 # Django with MicroK8s
 ## Start Building Your Project
-This project is meant to be both a reference and an actual github template that
-can be used to quickly start development on a Django-based web app. After
+This project provides a Django web app running as a single node Kubernetes
+cluster in microk8s. It is meant to make it as easy as possible to begin
+building a project with a minimum of initial configuration.
+
+This is both a reference and an actual github template that
+can be used to quickly start development. After
 installing prerequisites and downloading this repository, only one command is
 needed to have a working, browsable application.
-
-The web app runs in a Kubernetes cluster run by microk8s, which allows us to
-ignore a lot of complexity normally involved with installing software for local
-development.
 
 ## Provided Tools
   - A running Django server 
@@ -21,29 +21,170 @@ development.
   - Continuous Integration via Github Actions
   - A shell script with useful commands to interact with the system
 
-
 ## Prerequisites
 You'll need to install the following software:
 - Docker >= v20.10.0
 - Microk8s >= v1.21
 - [Pre-commit](https://pre-commit.com/) >= 2.12.1
 
-## Installation
+Note that the system has only been tested on Ubuntu 18+, but should
+theoretically work for any host OS on which Microk8s and docker can be
+installed.
+
+## Initial Operation
+1) Install pre-requisites.
+1) Download the repository:
+
+    ```
+    git clone git@github.com:bluemoo/django-with-microk8s.git
+    ```
+
+1) Install pre-commit hooks:
+
+    ```
+    pre-commit install
+    ```
+1) Start Microk8s and enable required add-ons:
+    
+    ```
+    microk8s.start
+    microk8s enable helm3 dns storage registry host-access ingress
+    ```
+1) Start the system:
+    ```
+    ./dev.sh start
+    ```
+1) Check for successful startup with: 
+   ```
+   ./dev.sh status
+   ```
+1) Navigate to http://localhost:8000 and you should see Django tell you it was 
+   installed successfully!
+
+## Example System Start
 ```
-pre-commit install
-```
-```
-microk8s.start
-microk8s enable helm3 dns storage registry host-access ingress
+$ microk8s.start
+Started.
+
+$ ./dev.sh start
+Checking microk8s configuration
+Build image
+Sending build context to Docker daemon  7.146MB
+<-- Snipped Steps -->
+Successfully built aeb2100b9b07
+Successfully tagged server:development-server
+Pushing image to registry
+The push refers to repository [localhost:32000/server]
+<-- Snip Pushing Image -->
+Setting up Secrets
+<-- Snip -->
+Installing database
+<-- Snip -->
+Wait for database to be ready
+pod/postgres-statefulset-0 condition met
+Installing server
+<-- Snip -->
+Configuring Ingress
+configmap/nginx-ingress-tcp-microk8s-conf unchanged
+daemonset.apps/nginx-ingress-microk8s-controller unchanged
+
+$ ./dev.sh status
+NAME                                  READY   STATUS      RESTARTS   AGE
+development-server-7f5c56ff54-wmgf5   1/1     Running     0          9s
+migration-job-gqd65                   0/1     Completed   0          13s
+postgres-statefulset-0                1/1     Running     0          18s
+redis-statefulset-0                   1/1     Running     0          9s
+
+$ wget http://localhost:8000/
+2021-05-11 20:07:00 (84,3 MB/s) - ‘index.html’ saved [10697/10697]
+
+$ grep "The install worked successfully! Congratulations!" index.html 
+        <title>The install worked successfully! Congratulations!</title>
+        <h1>The install worked successfully! Congratulations!</h1>
+
+$ ./dev.sh test
+.System check identified no issues (0 silenced).
+..
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
+
 ```
 
-## Operation
-1. Pull the repository locally, and run: `./dev.sh start` 
-1. Check for successful startup with: `./dev.sh status`
-1. Navigate to http://localhost:8000/admin and you should see the django admin form.
-1. Try to log in with any username + password, and you'll be rejected without other error if the server is properly talking to the server.
+## Development Workflows
+### dev.sh
+The project comes with a shell script `dev.sh` that contains helpful commands to interact
+with the running system. In particular, it has options to install/uninstall the system, 
+run django  management commands, and run django tests. For a full set of options, simply 
+type: `./dev.sh help`
 
-## Workflow
+### Hot code reloading
+The development server mounts files directly from your file system, so any changes to 
+python files will be automatically noticed and result in the server automatically reloading
+the code:
+```
+$ ./dev.sh server-logs
+10.1.97.1 - - [11/May/2021 18:33:12] "GET / HTTP/1.1" 200 -
+10.1.97.1 - - [11/May/2021 18:33:12] "GET / HTTP/1.1" 200 -
+ * Detected change in '/opt/project/server/appsecrets.py', reloading
+ * Restarting with stat
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+Django version 3.2.2, using settings 'settings'
+Development server is running at http://0.0.0.0:8000/
+Using the Werkzeug debugger (http://werkzeug.pocoo.org/)
+Quit the server with CONTROL-C.
+```
+Thus, you can edit, save, and see your changes in your app very quickly.
+
+### Database migrations
+As this is a development environment, migrations are automatically applied on system start
+up, so you'll have an empty django database schema from the beginning. You can perform all
+other database interactions as you would normally via the Django manage command provided 
+by `dev.sh`:
+```
+$ ./dev.sh manage makemigrations
+No changes detected
+
+$ ./dev.sh manage migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  No migrations to apply.
+```
+
+### Testing
+While django tests can be run via the manage command, the `dev.sh` file provides a small
+shortcut, allowing you to simply use `./dev.sh test`. You can also pass one or more test
+labels:
+```
+$ ./dev.sh test
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
+System check identified no issues (0 silenced).
+```
+```
+$ ./dev.sh test tests.test_appsecrets.AppSecretsIntegrationTest
+.
+----------------------------------------------------------------------
+System check identified no issues (0 silenced).
+Ran 1 test in 0.000s
+
+OK
+```
+
+## Next steps
+This development environment should server you well until you're ready to actually deploy
+your app to production. However, if you're new to Django, you can easily pick up the
+tutorial from [Creating the Polls app](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#creating-the-polls-app).
+Just remember that instead of typing `python manage.py startapp polls` you should use
+`./dev.sh manage startapp polls` instead. Good luck!
 
 ## Notes
 If you want to run docker as non-root user then you need to add it to the docker group.
