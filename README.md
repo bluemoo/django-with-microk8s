@@ -66,6 +66,20 @@ installed.
 $ microk8s.start
 Started.
 
+$ microk8s enable helm3 dns storage registry host-access ingress
+Enabling Helm 3
+Fetching helm version v3.5.0.
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 11.7M  100 11.7M    0     0  8430k      0  0:00:01  0:00:01 --:--:-- 8430k
+Helm 3 is enabled
+Addon dns is already enabled.
+Addon storage is already enabled.
+Addon registry is already enabled.
+Addon host-access is already enabled.
+Addon ingress is already enabled.
+
+
 $ ./dev.sh start
 Checking microk8s configuration
 Build image
